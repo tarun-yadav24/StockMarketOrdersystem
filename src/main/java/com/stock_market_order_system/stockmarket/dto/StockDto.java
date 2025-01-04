@@ -1,4 +1,4 @@
-package com.stock_market_order_system.stockmarket.model;
+package com.stock_market_order_system.stockmarket.dto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Stock {
+public class StockDto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

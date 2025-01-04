@@ -1,8 +1,8 @@
 package com.stock_market_order_system.stockmarket.service;
 
-import com.stock_market_order_system.stockmarket.model.Stock;
-import com.stock_market_order_system.stockmarket.model.Transaction;
-import com.stock_market_order_system.stockmarket.model.User;
+import com.stock_market_order_system.stockmarket.dto.StockDto;
+import com.stock_market_order_system.stockmarket.dto.TransactionDto;
+import com.stock_market_order_system.stockmarket.dto.UserDto;
 import com.stock_market_order_system.stockmarket.repository.StockRepository;
 import com.stock_market_order_system.stockmarket.repository.TransactionRepository;
 import com.stock_market_order_system.stockmarket.repository.UserRepository;
@@ -22,9 +22,9 @@ public class StockService {
     TransactionRepository transactionRepository;
 
     public void buyStock(long BuyerId,long StockId,int Quantity){
-        User Buyer = userRepository.findById(BuyerId).orElseThrow();
-        Stock Stock = stockRepository.findById(StockId).orElseThrow();
-        double totalStockPrice = Stock.getPrice() * Quantity;
+        UserDto Buyer = userRepository.findById(BuyerId).orElseThrow();
+        StockDto StockDto = stockRepository.findById(StockId).orElseThrow();
+        double totalStockPrice = StockDto.getPrice() * Quantity;
 
         if(Buyer.getTotalAmount()<totalStockPrice){
             throw new RuntimeException("Insufficient funds to purchase stocks.");
@@ -34,18 +34,18 @@ public class StockService {
         Buyer.setStocksOwned(Buyer.getStocksOwned()+Quantity);
         userRepository.save(Buyer);
 
-        Transaction transaction = new Transaction();
-        transaction.setBuyerId(BuyerId);
-        transaction.setStockId(StockId);
-        transaction.setQuantity(Quantity);
-        transactionRepository.save(transaction);
+        TransactionDto transactionDto = new TransactionDto();
+        transactionDto.setBuyerId(BuyerId);
+        transactionDto.setStockId(StockId);
+        transactionDto.setQuantity(Quantity);
+        transactionRepository.save(transactionDto);
 
     }
 
     public void sellStock(long SellerId,long StockId,int Quantity){
-        User Seller = userRepository.findById(SellerId).orElseThrow();
-        Stock stock = stockRepository.findById(StockId).orElseThrow();
-        double totalStockPrice = stock.getPrice() * Quantity;
+        UserDto Seller = userRepository.findById(SellerId).orElseThrow();
+        StockDto stockDto = stockRepository.findById(StockId).orElseThrow();
+        double totalStockPrice = stockDto.getPrice() * Quantity;
 
         if(Seller.getStocksOwned()<Quantity){
             throw new RuntimeException("Insufficient Stocks to Sell.");
@@ -55,17 +55,28 @@ public class StockService {
         Seller.setStocksOwned(Seller.getStocksOwned()-Quantity);
         userRepository.save(Seller);
 
-        Transaction transaction = new Transaction();
-        transaction.setBuyerId(SellerId);
-        transaction.setStockId(StockId);
-        transaction.setQuantity(Quantity);
-        transactionRepository.save(transaction);
+        TransactionDto transactionDto = new TransactionDto();
+        transactionDto.setBuyerId(SellerId);
+        transactionDto.setStockId(StockId);
+        transactionDto.setQuantity(Quantity);
+        transactionRepository.save(transactionDto);
     }
 
-    public User getUserDashboard(long userId) {
-        User user = userRepository.findById(userId).orElseThrow();
-        return user;
+    public UserDto getUserDashboard(long userId) {
+        UserDto userDto = userRepository.findById(userId).orElseThrow();
+        return userDto;
     }
+
+    public void registerUser(UserDto userDto) {
+        userDto.setUsername(userDto.getUsername());
+
+        userRepository.save(userDto);
+    }
+    public void registerStock(StockDto stockDto) {
+        stockDto.setName(stockDto.getName());
+        stockRepository.save(stockDto);
+    }
+
 
 }
 

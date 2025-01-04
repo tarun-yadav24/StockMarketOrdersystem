@@ -8,11 +8,11 @@
 		<version>3.4.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.stock-market-order-system</groupId>
+	<groupId>com.stockDto-market-order-system</groupId>
 	<artifactId>stockmarket</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>stockmarket</name>
-	<description>stock market order system</description>
+	<description>stockDto market order system</description>
 	<url/>
 	<licenses>
 		<license/>
